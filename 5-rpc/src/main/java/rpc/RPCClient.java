@@ -11,12 +11,14 @@ public class RPCClient {
         ) {
             //Invoking the method
             dos.writeUTF("sumar");
+            dos.writeInt(2);
             dos.writeInt(5);
             dos.writeInt(3);
 
             // receive the result
             int result = dis.readInt();
             System.out.println("Resultado de la suma: " + result);
+            socket.close();
 
         } catch (IOException e) {
             e.printStackTrace();

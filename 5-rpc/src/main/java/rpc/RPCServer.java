@@ -34,9 +34,11 @@ class RPCHandler implements Runnable {
             String methodName = dis.readUTF();
 
             if (methodName.equals("sumar")) {
-                int a = dis.readInt();
-                int b = dis.readInt();
-                int result = sumar(a, b);
+                int params = dis.readInt();
+                int []v = new int[params];
+                for(int i = 0; i < params; i++)
+                    v[i] = dis.readInt();
+                int result = sumar(v);
                 dos.writeInt(result);
             } else {
                 dos.writeUTF("The method is not implemented");
@@ -49,7 +51,10 @@ class RPCHandler implements Runnable {
     }
 
     // The method that will be called 
-    public int sumar(int a, int b) {
-        return a + b;
+    public int sumar(int []v) {
+        int res = 0;
+        for(int i : v)
+            res += i;
+        return res;
     }
 }

@@ -12,12 +12,23 @@ public class SecondTimer implements Runnable {
 
     public void run() {
         // to be implemented by the student
+        while(true){
+            try{
+                Thread.sleep(1000);
+                seconds += 1;
+                System.out.println("Seconds: " + seconds);
+            }catch(InterruptedException e){
+                e.printStackTrace();
+                return;
+            }
+            
+        }
     }
 
     public static void main(String[] args){
-        System.out.println("Secconds to wait");
+        System.out.println("Seconds to wait");
         try (Scanner secin = new Scanner(System.in)) {
-            int secontsToWait = secin.nextInt();
+            int secondsToWait = secin.nextInt();
 
             SecondTimer timer = new SecondTimer();
             Thread timerThread = new Thread(timer);
@@ -25,7 +36,7 @@ public class SecondTimer implements Runnable {
             timerThread.start();
 
             try {
-                Thread.sleep(secontsToWait * 1000);
+                Thread.sleep(secondsToWait * 1000);
                 timerThread.interrupt();  //Stop the timer
    } catch (InterruptedException e) {
             e.printStackTrace();

@@ -6,8 +6,10 @@ import java.io.*;
 import javax.imageio.*;
 import javax.swing.*;
 
+import sounds.reproduccionSonidos;
 
-public class Movie extends Component {
+
+public class Movie extends Component implements Runnable{
     private static final long serialVersionUID = 1L;
 
     BufferedImage[] imgs;   // array to store images 
@@ -29,11 +31,50 @@ public class Movie extends Component {
         } catch (IOException e) {
             e.toString();
         }
+        }
+
+
+        width = imgs[0].getWidth();
+        widthFrame = width * numImages;
+
     }
 
-    width = imgs[0].getWidth();
-    widthFrame = width * numImages;
+    @Override
+    public void run() {
+        JFrame f = new JFrame();
+        f.setBackground(Color.WHITE);
+        //f.setBackground(Color.LIGHT_GRAY);
 
+        // 2.a close when the close button is clicked
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // 3. set the window to the center 
+        f.setLocationRelativeTo(null);
+
+        // put the photo in the frame
+        f.add(this);
+
+        
+        
+        while(true){
+            //Size the frame
+            f.pack();
+            f.repaint();
+            //show the frame
+            f.setVisible(true);
+
+            try{
+                Thread.sleep(150);   // how fast images are rendered?
+            }catch(InterruptedException e){
+                e.printStackTrace();
+            }
+            //show the movement
+            this.nextMovement();
+
+
+
+
+        }
     }
 
     public void nextMovement() {
@@ -54,42 +95,13 @@ public class Movie extends Component {
 
     public static void main(String[] args) {
         // 1. Create a movie with images...  
-        Movie photoSeq = new Movie("2-reproduccion\\\\src\\\\main\\\\resources\\\\fotograms\\\\horse", 5);
+        Thread photoSeq = new Thread(new Movie("2-reproduccion\\\\src\\\\main\\\\resources\\\\fotograms\\\\jirafas", 3));
         //Movie photoSeq = new Movie ("path");
 
-        // 2. create a frame
-        JFrame f = new JFrame();
-        f.setBackground(Color.WHITE);
-        //f.setBackground(Color.LIGHT_GRAY);
-
-        // 2.a close when the close button is clicked
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        // 3. set the window to the center 
-        f.setLocationRelativeTo(null);
-
-        // put the photo in the frame
-        f.add(photoSeq);
-
-        while(true){
-            //Size the frame
-            f.pack();
-            f.repaint();
-            //show the frame
-            f.setVisible(true);
-
-            try{
-                Thread.sleep(150);   // how fast images are rendered?
-            }catch(InterruptedException e){
-                e.printStackTrace();
-            }
-            //show the movement
-            photoSeq.nextMovement();
-
-
-
-
-        }
+        Thread sonido = new Thread(new reproduccionSonidos("2-reproduccion\\\\src\\\\main\\\\resources\\\\sounds\\\\maullido.wav"));
+        
+        photoSeq.start();
+        sonido.start();
 
 
     }

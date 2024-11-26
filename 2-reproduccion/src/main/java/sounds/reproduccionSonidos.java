@@ -4,8 +4,37 @@ import java.io.File;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
-public class reproduccionSonidos {
+public class reproduccionSonidos implements Runnable {
    
+    private String path;
+
+    reproduccionSonidos(String path){
+        this.path = path;
+    }
+
+    @Override
+	public void run() {
+        try {
+
+            Clip audio   =  AudioSystem.getClip();
+  
+            audio.open(AudioSystem.getAudioInputStream(new File(path)));
+            
+            audio.start();
+            Thread.sleep(100);
+            while(audio.isRunning()){
+                Thread.sleep(1000);
+            }
+        
+
+            audio.close();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+		
+}
+/*
     public static void main(String[] args) {
 
         try {
@@ -37,4 +66,4 @@ public class reproduccionSonidos {
             e.printStackTrace();
         }
     }
-}
+        */

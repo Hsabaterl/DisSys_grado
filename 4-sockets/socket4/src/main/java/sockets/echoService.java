@@ -11,35 +11,36 @@ public class echoService implements Runnable {
     Socket socket = null;
     int id = 0;
 
-
     public echoService(Socket socket, int id) {
         // TODO: Initialisate the thread with the socket and the id connection
-
+        this.socket = socket;
+        this.id = id;
     }
 
     public void run() {
         String inputLine = null;
 
         try {
-            //  2 Create BufferedReader for reading from the socket
-            
+            // 2 Create BufferedReader for reading from the socket
+            BufferedReader inReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             // 4 Create PrintWriter for writing to the socket
-            
+            PrintWriter pWriter = new PrintWriter(socket.getOutputStream());
             // 5 Read lines from the socket until it receives an EOFException (end of file)
-            
-            // 6 Write each line received to the socket, including the echoed line
-            
+            while ((inputLine = inReader.readLine()) != null) {
+                // 6 Write each line received to the socket, including the echoed line
+                pWriter.println(inputLine);
+            }
 
         } catch (IOException e) {
 
         } finally {
             try {
                 // 7 Close the socket when done.
+                socket.close();
             } catch (IOException e) {
                 System.out.println("Error closing socket: " + e.getMessage());
             }
         }
-    
-    
-}
+
+    }
 }
